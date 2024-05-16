@@ -29,15 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.authorizeRequests(requests -> requests
                 .antMatchers("/editar/**", "/agregar/**", "/eliminar")
                 .hasRole("ADMIN")
                 .antMatchers("/")
-                .hasAnyRole("USER", "ADMIN")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .and()
-                .exceptionHandling().accessDeniedPage("/errores/403");
+                .hasAnyRole("USER", "ADMIN"))
+                .formLogin(login -> login
+                        .loginPage("/login"))
+                .exceptionHandling(handling -> handling.accessDeniedPage("/errores/403"));
     }
 }
